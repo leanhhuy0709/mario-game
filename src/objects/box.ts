@@ -7,12 +7,13 @@ export class Box extends Phaser.GameObjects.Sprite {
     // variables
     private currentScene: Phaser.Scene
     private boxContent: string
-    private content: Collectible
+    private content: Collectible | null
 
     private hitBoxTimeline: Phaser.Tweens.Timeline
 
-    public getContent(): Phaser.GameObjects.Sprite {
-        return this.content
+    public getContent(): Phaser.GameObjects.Sprite | null {
+        if (this.content) return this.content
+        else return null
     }
 
     public getBoxContentString(): string {
@@ -94,9 +95,11 @@ export class Box extends Phaser.GameObjects.Sprite {
     }
 
     public popUpCollectible(): void {
-        this.content.body.setVelocity(30, -50)
-        this.content.body.setAllowGravity(true)
-        this.content.body.setGravityY(-300)
+        if (this.content) {
+            this.content.body.setVelocity(30, -50)
+            this.content.body.setAllowGravity(true)
+            this.content.body.setGravityY(-300)
+        }
     }
 
     public addCoinAndScore(coin: number, score: number): void {
