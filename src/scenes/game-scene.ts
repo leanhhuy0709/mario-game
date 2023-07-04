@@ -139,6 +139,7 @@ export class GameScene extends Phaser.Scene {
 
     private loadObjectsFromTilemap(): void {
         // get the object layer in the tilemap named 'objects'
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const objects = this.map.getObjectLayer('objects').objects as any[]
 
         objects.forEach((object) => {
