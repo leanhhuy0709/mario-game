@@ -36,7 +36,7 @@ export class GameScene extends Phaser.Scene {
         // *****************************************************************
         // SETUP TILEMAP
         // *****************************************************************
-
+        
         // create our tilemap from Tiled JSON
         this.map = this.make.tilemap({ key: this.registry.get('level') })
         // add our tileset and layers to our tilemap
@@ -48,7 +48,7 @@ export class GameScene extends Phaser.Scene {
 
         // set collision for tiles with the property collide set to true
         this.foregroundLayer.setCollisionByProperty({ collide: true })
-
+    
         // *****************************************************************
         // GAME OBJECTS
         // *****************************************************************
