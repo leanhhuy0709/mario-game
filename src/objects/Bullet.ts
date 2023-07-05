@@ -3,7 +3,7 @@ export default class Bullet extends Phaser.GameObjects.Sprite {
         super(scene, x, y, 'fireball')
         scene.add.existing(this)
         scene.physics.world.enableBody(this)
-
+        this.setAngle(25)
         this.body.velocity.x = 200 * direct
         if (direct == -1) this.setFlipX(true)
         const body = this.body as Phaser.Physics.Arcade.Body
@@ -12,6 +12,5 @@ export default class Bullet extends Phaser.GameObjects.Sprite {
         this.setScale(1.5)
 
         this.play('fireball')
-        this.setAngle(25)
     }
 }
