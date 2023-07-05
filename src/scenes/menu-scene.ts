@@ -15,7 +15,7 @@ export class MenuScene extends Phaser.Scene {
     }
 
     create(): void {
-        this.add.image(1000, 0, 'title').setOrigin(0.5, 0).setScale(8)
+        this.add.image(1000, 0, 'menu').setOrigin(0.5, 0)
 
         this.bitmapTexts.push(
             this.add.bitmapText(1000, 900, 'font', 'PRESS S TO PLAY', 8 * 8).setOrigin(0.5, 0.5)
@@ -32,7 +32,7 @@ export class MenuScene extends Phaser.Scene {
 
     private initGlobalDataManager(): void {
         this.registry.set('time', 400)
-        this.registry.set('level', 'game3')
+        this.registry.set('level', 'game1')
         this.registry.set('world', '1-1')
         this.registry.set('worldTime', 'WORLD TIME')
         this.registry.set('score', 0)

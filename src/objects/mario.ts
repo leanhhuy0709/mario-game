@@ -1,11 +1,14 @@
 import { ISpriteConstructor } from '../interfaces/sprite.interface'
+import { HUDScene } from '../scenes/hud-scene'
+import Bullet from './Bullet'
 
 const JUMP_SIZE = 500
 const MAX_VELOCITY_X = 200
 const MAX_VELOCITY_Y = 500
-
 export class Mario extends Phaser.GameObjects.Sprite {
     body: Phaser.Physics.Arcade.Body
+
+    bullets: Phaser.GameObjects.Group
 
     // variables
     private currentScene: Phaser.Scene
@@ -15,6 +18,10 @@ export class Mario extends Phaser.GameObjects.Sprite {
     private isDying: boolean
     private isVulnerable: boolean
     private vulnerableCounter: number
+    private fireFlag = false
+
+    private spawnX: number
+    private spawnY: number
 
     // input
     private keys: Map<string, Phaser.Input.Keyboard.Key>
@@ -27,7 +34,7 @@ export class Mario extends Phaser.GameObjects.Sprite {
         return this.isVulnerable
     }
 
-    constructor(aParams: ISpriteConstructor) {
+    constructor(aParams: ISpriteConstructor, bullets: Phaser.GameObjects.Group) {
         super(aParams.scene, aParams.x, aParams.y, aParams.texture, aParams.frame)
 
         this.currentScene = aParams.scene
@@ -35,8 +42,13 @@ export class Mario extends Phaser.GameObjects.Sprite {
         //this.setSize(100, 100)
         this.body.setSize(13, 13)
         this.setDisplaySize(100, 100)
-        
+
         this.currentScene.add.existing(this)
+
+        this.bullets = bullets
+
+        this.spawnX = aParams.x
+        this.spawnY = aParams.y
     }
 
     private initSprite() {
@@ -129,13 +141,19 @@ export class Mario extends Phaser.GameObjects.Sprite {
             isMoved = true
         }
 
-        if (!isMoved) {
-            if (this.keys.get('FIRE')?.isDown)
-            {
-                console.log(1)
-            }
+        if (!isMoved && this.keys.get('FIRE')?.isDown) {
+            this.fire()
+            this.fireFlag = false
+        } else {
+            this.fireFlag = true
         }
-        
+    }
+
+    public fire(): void {
+        if (this.fireFlag) {
+            if (this.flipX) this.bullets.add(new Bullet(this.scene, this.x - 64, this.y, -1))
+            else this.bullets.add(new Bullet(this.scene, this.x + 64, this.y, 1))
+        }
     }
 
     private handleAnimations(): void {
@@ -159,7 +177,7 @@ export class Mario extends Phaser.GameObjects.Sprite {
                 if (this.keys.get('DOWN')?.isDown) {
                     this.setFrame(1)
                 } else {
-                    this.setFrame(6)
+                    this.setFrame(5)
                 }
             }
         }
@@ -200,6 +218,15 @@ export class Mario extends Phaser.GameObjects.Sprite {
         if (this.marioSize === 'big') {
             this.shrinkMario()
         } else {
+            const lives = this.scene.registry.get('lives')
+            if (lives > 1) {
+                this.scene.registry.set('lives', lives - 1)
+                this.setPosition(this.spawnX, this.spawnY)
+                const HUDScene = this.scene.scene.get('HUDScene') as HUDScene
+                HUDScene.updateLives()
+                return
+            }
+
             // mario is dying
             this.isDying = true
 

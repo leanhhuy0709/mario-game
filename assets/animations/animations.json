@@ -1,6 +1,39 @@
 {
   "anims": [
     {
+      "key": "tard",
+      "frames": {
+        "typeOfGeneration": "generateFrameNumbers",
+        "key": "tard",
+        "start": 0,
+        "end": 5
+      },
+      "repeat": -1,
+      "frameRate": 18
+    },
+    {
+      "key": "doux",
+      "frames": {
+        "typeOfGeneration": "generateFrameNumbers",
+        "key": "doux",
+        "start": 0,
+        "end": 5
+      },
+      "repeat": -1,
+      "frameRate": 18
+    },
+    {
+      "key": "egg",
+      "frames": {
+        "typeOfGeneration": "generateFrameNumbers",
+        "key": "egg",
+        "start": 0,
+        "end": 3
+      },
+      "repeat": 0,
+      "frameRate": 10
+    },
+    {
       "key": "smallMarioWalk",
       "frames": {
         "typeOfGeneration": "generateFrameNumbers",
@@ -62,6 +95,17 @@
         "key": "flower",
         "start": 0,
         "end": 1
+      },
+      "repeat": -1,
+      "frameRate": 18
+    },
+    {
+      "key": "fireball",
+      "frames": {
+        "typeOfGeneration": "generateFrameNumbers",
+        "key": "fireball",
+        "start": 0,
+        "end": 11
       },
       "repeat": -1,
       "frameRate": 18

@@ -1361,19 +1361,6 @@
                  "id":100
                 }],
          "tilewidth":64
-        }, 
-        {
-         "columns":20,
-         "firstgid":127,
-         "image":"..\/tiles\/ground-tiles.png",
-         "imageheight":585,
-         "imagewidth":1300,
-         "margin":0,
-         "name":"ground-tiles",
-         "spacing":0,
-         "tilecount":180,
-         "tileheight":64,
-         "tilewidth":64
         }],
  "tilewidth":64,
  "type":"map",

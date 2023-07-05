@@ -22,6 +22,10 @@ export class GameScene extends Phaser.Scene {
     private player: Mario
     private portals: Phaser.GameObjects.Group
 
+    private doux: Phaser.GameObjects.Sprite | null
+
+    private bullets: Phaser.GameObjects.Group
+
     constructor() {
         super({
             key: 'GameScene',
@@ -39,6 +43,20 @@ export class GameScene extends Phaser.Scene {
 
         // create our tilemap from Tiled JSON
         this.map = this.make.tilemap({ key: this.registry.get('level') })
+
+        let world = ''
+        switch (this.registry.get('level')) {
+            case 'game1':
+                world = '1-1'
+                break
+            case 'game2':
+                world = '1-2'
+                break
+            case 'game3':
+                world = '1-3'
+                break
+        }
+        this.registry.set('world', world)
         // add our tileset and layers to our tilemap
         this.tileset = this.map.addTilesetImage('fish-tiles')
 
@@ -59,6 +77,8 @@ export class GameScene extends Phaser.Scene {
         // *****************************************************************
         // GAME OBJECTS
         // *****************************************************************
+        this.doux = null
+
         this.portals = this.add.group({
             //classType: Portal,//
             runChildUpdate: true,
@@ -80,6 +100,10 @@ export class GameScene extends Phaser.Scene {
         })
 
         this.enemies = this.add.group({
+            runChildUpdate: true,
+        })
+
+        this.bullets = this.add.group({
             runChildUpdate: true,
         })
 
@@ -133,11 +157,45 @@ export class GameScene extends Phaser.Scene {
             this
         )
 
+        this.physics.add.overlap(
+            this.bullets,
+            this.enemies,
+            this.handleBulletKillEnemy,
+            undefined,
+            this
+        )
+
+        this.physics.add.collider(
+            this.bullets,
+            this.foregroundLayer,
+            (bullet, _fore) => {
+                bullet.destroy()
+            },
+            undefined,
+            this
+        )
+
         // *****************************************************************
         // CAMERA
         // *****************************************************************
         this.cameras.main.startFollow(this.player)
         this.cameras.main.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels) //*/
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    private handleBulletKillEnemy(o1: any, enemy: any): void {
+        o1.destroy()
+        enemy.gotHitOnHead()
+        this.add.tween({
+            targets: enemy,
+            props: { alpha: 0 },
+            duration: 1000,
+            ease: 'Power0',
+            yoyo: false,
+            onComplete: function () {
+                enemy.isDead()
+            },
+        })
     }
 
     update(): void {
@@ -167,12 +225,15 @@ export class GameScene extends Phaser.Scene {
             }
 
             if (object.type === 'player') {
-                this.player = new Mario({
-                    scene: this,
-                    x: object.x,
-                    y: object.y,
-                    texture: 'move',
-                })
+                this.player = new Mario(
+                    {
+                        scene: this,
+                        x: object.x,
+                        y: object.y,
+                        texture: 'move',
+                    },
+                    this.bullets
+                )
             }
 
             if (object.type === 'goomba') {
@@ -264,6 +325,36 @@ export class GameScene extends Phaser.Scene {
                         },
                     })
                 )
+            }
+
+            if (object.type === 'tard') {
+                const tard = this.add.sprite(object.x, object.y, 'tard').setFlipX(true)
+                this.physics.add.existing(tard)
+                tard.setDisplaySize(100, 100)
+                const body = tard.body as Phaser.Physics.Arcade.Body
+                body.setSize(13, 13)
+                this.physics.add.collider(tard, this.foregroundLayer)
+            }
+
+            if (object.type === 'doux') {
+                const doux = this.add.sprite(object.x, object.y, 'doux')
+                this.physics.add.existing(doux)
+                doux.setDisplaySize(100, 100)
+                const body = doux.body as Phaser.Physics.Arcade.Body
+                body.setSize(13, 13)
+                this.physics.add.collider(doux, this.foregroundLayer)
+                doux.play('doux')
+                this.doux = doux
+            }
+
+            if (object.type === 'egg') {
+                const egg = this.add.sprite(object.x, object.y, 'egg').setFlipX(true)
+                this.physics.add.existing(egg)
+                egg.setDisplaySize(100, 100)
+                const body = egg.body as Phaser.Physics.Arcade.Body
+                body.setSize(13, 13)
+                this.physics.add.collider(egg, this.foregroundLayer)
+                egg.play('egg')
             }
         })
     }
@@ -357,8 +448,12 @@ export class GameScene extends Phaser.Scene {
             this.scene.stop('HUDScene')
             this.scene.start('MenuScene')
         } else if (_portal.name === 'winner') {
-            console.log("You win")
-            //do something special!!
+            console.log('You win')
+            this.scene.stop('GameScene')
+            this.scene.stop('HUDScene')
+            this.scene.start('WinScene')
+        } else if (_portal.name === 'doux_run') {
+            if (this.doux) this.doux.body.velocity.x = 50
         } else {
             // set new level and new destination for mario
             this.registry.set('level', _portal.name)
@@ -397,7 +492,7 @@ export class GameScene extends Phaser.Scene {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     private handlePlayerOnPlatform(player: any, platform: any): void {
         if (platform.body.moves && platform.body.touching.up && player.body.touching.down) {
-            console.log(1)
+            //
         }
     }
 }

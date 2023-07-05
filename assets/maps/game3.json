@@ -1067,6 +1067,66 @@
                  "width":64,
                  "x":3098,
                  "y":432
+                }, 
+                {
+                 "height":124,
+                 "id":191,
+                 "name":"tard",
+                 "rotation":0,
+                 "type":"tard",
+                 "visible":true,
+                 "width":62.666666666667,
+                 "x":5758,
+                 "y":579.333333333333
+                }, 
+                {
+                 "height":124,
+                 "id":194,
+                 "name":"doux",
+                 "rotation":0,
+                 "type":"doux",
+                 "visible":true,
+                 "width":62.6667,
+                 "x":6029.99998333333,
+                 "y":967.333333333333
+                }, 
+                {
+                 "height":60,
+                 "id":197,
+                 "name":"egg",
+                 "rotation":0,
+                 "type":"egg",
+                 "visible":true,
+                 "width":46.6667,
+                 "x":5688.66665,
+                 "y":636
+                }, 
+                {
+                 "height":1085.51448484848,
+                 "id":198,
+                 "name":"doux_run",
+                 "properties":[
+                        {
+                         "name":"direction",
+                         "type":"string",
+                         "value":"down"
+                        }, 
+                        {
+                         "name":"marioSpawnX",
+                         "type":"int",
+                         "value":64
+                        }, 
+                        {
+                         "name":"marioSpawnY",
+                         "type":"int",
+                         "value":64
+                        }],
+                 "rotation":0,
+                 "type":"portal",
+                 "visible":true,
+                 "width":63,
+                 "x":5056.68181818182,
+                 "y":-0.999666666666712
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -1106,7 +1166,7 @@
          "y":0
         }],
  "nextlayerid":8,
- "nextobjectid":191,
+ "nextobjectid":199,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.10.1",

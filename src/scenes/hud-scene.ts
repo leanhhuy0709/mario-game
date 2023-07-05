@@ -10,12 +10,11 @@ export class HUDScene extends Phaser.Scene {
 
     create(): void {
         this.textElements = new Map([
-            ['LIVES', this.addText(100, 30, `MARIOx ${this.registry.get('lives')}`)],
-            ['WORLDTIME', this.addText(80 * 8, 30, `${this.registry.get('worldTime')}`)],
-            ['SCORE', this.addText(40 * 8, 8 * 8 + 30, `${this.registry.get('score')}`)],
-            ['COINS', this.addText(80 * 8, 8 * 8 + 30, `${this.registry.get('coins')}`)],
-            ['WORLD', this.addText(96 * 8, 8 * 8 + 30, `${this.registry.get('world')}`)],
-            ['TIME', this.addText(136 * 8, 8 * 8 + 30, `${this.registry.get('time')}`)],
+            ['LIVES', this.addText(10, 30, `HEARTx ${this.registry.get('lives')}`).setOrigin(0, 0)],
+            ['WORLDTIME', this.addText(2000, 30, `${this.registry.get('worldTime')}`).setOrigin(1, 0)],
+            ['SCORE', this.addText(10, 8 * 8 + 30, `${this.registry.get('score')}`).setOrigin(0, 0)],
+            ['WORLD', this.addText(1700, 8 * 8 + 30, `${this.registry.get('world')}`).setOrigin(1, 0)],
+            ['TIME', this.addText(2000, 8 * 8 + 30, `${this.registry.get('time')}`).setOrigin(1, 0)],
         ])
 
         // create events
@@ -58,8 +57,8 @@ export class HUDScene extends Phaser.Scene {
                 .setX(40 - 8 * (this.registry.get('score').toString().length - 1))
     }
 
-    private updateLives() {
+    public updateLives() {
         const lives = this.textElements.get('LIVES')
-        if (lives) lives.setText(`Lives: ${this.registry.get('lives')}`)
+        if (lives) lives.setText(`HEARTx ${this.registry.get('lives')}`)
     }
 }
