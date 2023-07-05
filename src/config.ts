@@ -8,8 +8,8 @@ export const GameConfig: Phaser.Types.Core.GameConfig = {
     title: 'Super Mario Land',
     url: 'https://github.com/leanhhuy0709/mario-game',
     version: '2.0',
-    width: 160,
-    height: 144,
+    width: 2000,
+    height: 1280,
     zoom: 5,
     type: Phaser.AUTO,
     parent: 'game',
@@ -21,8 +21,12 @@ export const GameConfig: Phaser.Types.Core.GameConfig = {
         default: 'arcade',
         arcade: {
             gravity: { y: 475 },
-            debug: true,
+            debug: false,
         },
+    },
+    scale: {
+        mode: Phaser.Scale.FIT,
+        autoCenter: Phaser.Scale.CENTER_BOTH
     },
     backgroundColor: '#f8f8f8',
     render: { pixelArt: true, antialias: false },

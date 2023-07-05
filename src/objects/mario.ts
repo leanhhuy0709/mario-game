@@ -1,5 +1,9 @@
 import { ISpriteConstructor } from '../interfaces/sprite.interface'
 
+const JUMP_SIZE = 500
+const MAX_VELOCITY_X = 200
+const MAX_VELOCITY_Y = 500
+
 export class Mario extends Phaser.GameObjects.Sprite {
     body: Phaser.Physics.Arcade.Body
 
@@ -28,17 +32,21 @@ export class Mario extends Phaser.GameObjects.Sprite {
 
         this.currentScene = aParams.scene
         this.initSprite()
+        //this.setSize(100, 100)
+        this.body.setSize(13, 13)
+        this.setDisplaySize(100, 100)
+        
         this.currentScene.add.existing(this)
     }
 
     private initSprite() {
         // variables
         this.marioSize = this.currentScene.registry.get('marioSize')
-        this.acceleration = 500
+        this.acceleration = 500 * 3
         this.isJumping = false
         this.isDying = false
         this.isVulnerable = true
-        this.vulnerableCounter = 100
+        this.vulnerableCounter = 100 * 4
 
         // sprite
         this.setOrigin(0.5, 0.5)
@@ -50,13 +58,14 @@ export class Mario extends Phaser.GameObjects.Sprite {
             ['RIGHT', this.addKey('RIGHT')],
             ['DOWN', this.addKey('DOWN')],
             ['JUMP', this.addKey('SPACE')],
+            ['FIRE', this.addKey('F')],
         ])
 
         // physics
         this.currentScene.physics.world.enable(this)
         this.adjustPhysicBodyToSmallSize()
-        this.body.maxVelocity.x = 50
-        this.body.maxVelocity.y = 300
+        this.body.maxVelocity.x = MAX_VELOCITY_X
+        this.body.maxVelocity.y = MAX_VELOCITY_Y
     }
 
     private addKey(key: string): Phaser.Input.Keyboard.Key {
@@ -68,7 +77,7 @@ export class Mario extends Phaser.GameObjects.Sprite {
             this.handleInput()
             this.handleAnimations()
         } else {
-            this.setFrame(12)
+            this.setFrame(5)
             if (this.y > this.currentScene.sys.canvas.height) {
                 this.currentScene.scene.stop('GameScene')
                 this.currentScene.scene.stop('HUDScene')
@@ -80,7 +89,7 @@ export class Mario extends Phaser.GameObjects.Sprite {
             if (this.vulnerableCounter > 0) {
                 this.vulnerableCounter -= 1
             } else {
-                this.vulnerableCounter = 100
+                this.vulnerableCounter = 100 * 4
                 this.isVulnerable = true
             }
         }
@@ -98,14 +107,16 @@ export class Mario extends Phaser.GameObjects.Sprite {
             this.isJumping = false
             //this.body.setVelocityY(0);
         }
-
+        let isMoved = false
         // handle movements to left and right
         if (this.keys.get('RIGHT')?.isDown) {
             this.body.setAccelerationX(this.acceleration)
             this.setFlipX(false)
+            isMoved = true
         } else if (this.keys.get('LEFT')?.isDown) {
             this.body.setAccelerationX(-this.acceleration)
             this.setFlipX(true)
+            isMoved = true
         } else {
             this.body.setVelocityX(0)
             this.body.setAccelerationX(0)
@@ -113,34 +124,26 @@ export class Mario extends Phaser.GameObjects.Sprite {
 
         // handle jumping
         if (this.keys.get('JUMP')?.isDown && !this.isJumping) {
-            this.body.setVelocityY(-180)
+            this.body.setVelocityY(-JUMP_SIZE)
             this.isJumping = true
+            isMoved = true
         }
+
+        if (!isMoved) {
+            if (this.keys.get('FIRE')?.isDown)
+            {
+                console.log(1)
+            }
+        }
+        
     }
 
     private handleAnimations(): void {
         if (this.body.velocity.y !== 0) {
             // mario is jumping or falling
             this.anims.stop()
-            if (this.marioSize === 'small') {
-                this.setFrame(4)
-            } else {
-                this.setFrame(10)
-            }
         } else if (this.body.velocity.x !== 0) {
             // mario is moving horizontal
-
-            // check if mario is making a quick direction change
-            if (
-                (this.body.velocity.x < 0 && this.body.acceleration.x > 0) ||
-                (this.body.velocity.x > 0 && this.body.acceleration.x < 0)
-            ) {
-                if (this.marioSize === 'small') {
-                    this.setFrame(5)
-                } else {
-                    this.setFrame(11)
-                }
-            }
 
             if (this.body.velocity.x > 0) {
                 this.anims.play(this.marioSize + 'MarioWalk', true)
@@ -154,7 +157,7 @@ export class Mario extends Phaser.GameObjects.Sprite {
                 this.setFrame(0)
             } else {
                 if (this.keys.get('DOWN')?.isDown) {
-                    this.setFrame(13)
+                    this.setFrame(1)
                 } else {
                     this.setFrame(6)
                 }
@@ -175,13 +178,11 @@ export class Mario extends Phaser.GameObjects.Sprite {
     }
 
     private adjustPhysicBodyToSmallSize(): void {
-        this.body.setSize(6, 12)
-        this.body.setOffset(6, 4)
+        this.setDisplaySize(100, 100)
     }
 
     private adjustPhysicBodyToBigSize(): void {
-        this.body.setSize(8, 16)
-        this.body.setOffset(4, 0)
+        this.setDisplaySize(150, 150)
     }
 
     public bounceUpAfterHitEnemyOnHead(): void {
@@ -208,7 +209,7 @@ export class Mario extends Phaser.GameObjects.Sprite {
             this.anims.stop()
 
             // make last dead jump and turn off collision check
-            this.body.setVelocityY(-180)
+            this.body.setVelocityY(-JUMP_SIZE / 2)
 
             // this.body.checkCollision.none did not work for me
             this.body.checkCollision.up = false

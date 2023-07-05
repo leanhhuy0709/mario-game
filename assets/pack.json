@@ -14,6 +14,21 @@
       },
       {
         "type": "tilemapTiledJSON",
+        "key": "game1",
+        "url": "./assets/maps/game1.json"
+      },
+      {
+        "type": "tilemapTiledJSON",
+        "key": "game2",
+        "url": "./assets/maps/game2.json"
+      },
+      {
+        "type": "tilemapTiledJSON",
+        "key": "game3",
+        "url": "./assets/maps/game3.json"
+      },
+      {
+        "type": "tilemapTiledJSON",
         "key": "level1Room1",
         "url": "./assets/maps/level1Room1.json"
       },
@@ -28,6 +43,11 @@
         "url": "./assets/tiles/tiles.png"
       },
       {
+        "type": "image",
+        "key": "fish-tiles",
+        "url": "./assets/tiles/fish-tiles.png"
+      },
+      {
         "type": "json",
         "key": "animationJSON",
         "url": "./assets/animations/animations.json"
@@ -39,6 +59,15 @@
         "frameConfig": {
           "frameWidth": 16,
           "frameHeight": 16
+        }
+      },
+      {
+        "type": "spritesheet",
+        "key": "move",
+        "url": "./assets/sprites/move.png",
+        "frameConfig": {
+          "frameWidth": 24,
+          "frameHeight": 24
         }
       },
       {

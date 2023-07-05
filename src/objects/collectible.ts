@@ -10,6 +10,8 @@ export class Collectible extends Phaser.GameObjects.Sprite {
     constructor(aParams: ICollectibleConstructor) {
         super(aParams.scene, aParams.x, aParams.y, aParams.texture, aParams.frame)
 
+        
+
         // variables
         this.currentScene = aParams.scene
         this.points = aParams.points
@@ -25,6 +27,7 @@ export class Collectible extends Phaser.GameObjects.Sprite {
         // physics
         this.currentScene.physics.world.enable(this)
         this.body.setSize(8, 8)
+        this.setScale(8)
         this.body.setAllowGravity(false)
     }
 

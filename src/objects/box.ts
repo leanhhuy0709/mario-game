@@ -22,10 +22,11 @@ export class Box extends Phaser.GameObjects.Sprite {
 
     constructor(aParams: IBoxConstructor) {
         super(aParams.scene, aParams.x, aParams.y, aParams.texture, aParams.frame)
-
+        this.setScale(8)
         // variables
         this.currentScene = aParams.scene
         this.boxContent = aParams.content
+
 
         this.initSprite()
         this.currentScene.add.existing(this)
@@ -54,8 +55,8 @@ export class Box extends Phaser.GameObjects.Sprite {
     public yoyoTheBoxUpAndDown(): void {
         this.hitBoxTimeline.add({
             targets: this,
-            props: { y: this.y - 10 },
-            duration: 60,
+            props: { y: this.y - 20 },
+            duration: 100,
             ease: 'Power0',
             yoyo: true,
             onComplete: function () {
@@ -71,7 +72,7 @@ export class Box extends Phaser.GameObjects.Sprite {
         this.content = new Collectible({
             scene: this.currentScene,
             x: this.x,
-            y: this.y - 8,
+            y: this.y - 50,
             texture: this.boxContent,
             points: 1000,
         })

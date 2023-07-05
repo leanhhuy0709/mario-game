@@ -15,6 +15,7 @@ export class Platform extends Phaser.GameObjects.Image {
         this.currentScene = aParams.scene
         this.tweenProps = aParams.tweenProps
 
+        this.setScale(8)
         this.initImage()
         this.initTween()
         this.currentScene.add.existing(this)

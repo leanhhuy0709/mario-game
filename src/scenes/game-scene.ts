@@ -36,19 +36,26 @@ export class GameScene extends Phaser.Scene {
         // *****************************************************************
         // SETUP TILEMAP
         // *****************************************************************
-        
+
         // create our tilemap from Tiled JSON
         this.map = this.make.tilemap({ key: this.registry.get('level') })
         // add our tileset and layers to our tilemap
-        this.tileset = this.map.addTilesetImage('tiles')
-        this.backgroundLayer = this.map.createLayer('backgroundLayer', this.tileset, 0, 0)
+        this.tileset = this.map.addTilesetImage('fish-tiles')
 
-        this.foregroundLayer = this.map.createLayer('foregroundLayer', this.tileset, 0, 0)
+        this.map.createLayer('T0', [this.tileset], 0, 0)
+        this.map.createLayer('T1', [this.tileset], 0, 0).setTint(0x02d5ff)
+
+        this.map
+            .createLayer('T2', [this.tileset], 0, 0)
+            .setTint(0x00ffff)
+            .setAlpha(100 / 255)
+        this.foregroundLayer = this.map.createLayer('T3', [this.tileset], 0, 0)
+        this.backgroundLayer = this.map.createLayer('T4', [this.tileset], 0, 0)
         this.foregroundLayer.setName('foregroundLayer')
 
         // set collision for tiles with the property collide set to true
         this.foregroundLayer.setCollisionByProperty({ collide: true })
-    
+
         // *****************************************************************
         // GAME OBJECTS
         // *****************************************************************
@@ -141,7 +148,6 @@ export class GameScene extends Phaser.Scene {
         // get the object layer in the tilemap named 'objects'
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const objects = this.map.getObjectLayer('objects').objects as any[]
-
         objects.forEach((object) => {
             if (object.type === 'portal') {
                 this.portals.add(
@@ -163,9 +169,9 @@ export class GameScene extends Phaser.Scene {
             if (object.type === 'player') {
                 this.player = new Mario({
                     scene: this,
-                    x: this.registry.get('spawn').x,
-                    y: this.registry.get('spawn').y,
-                    texture: 'mario',
+                    x: object.x,
+                    y: object.y,
+                    texture: 'move',
                 })
             }
 
@@ -193,10 +199,14 @@ export class GameScene extends Phaser.Scene {
             }
 
             if (object.type === 'box') {
+                let content = ''
+                if (object.properties[0].name == 'content') {
+                    content = object.properties[0].value
+                }
                 this.boxes.add(
                     new Box({
                         scene: this,
-                        content: object.properties.content,
+                        content: content,
                         x: object.x,
                         y: object.y,
                         texture: 'box',
@@ -205,12 +215,16 @@ export class GameScene extends Phaser.Scene {
             }
 
             if (object.type === 'collectible') {
+                let kindOfCollectible = ''
+                if (object.properties[0].name == 'kindOfCollectible') {
+                    kindOfCollectible = object.properties[0].value
+                }
                 this.collectibles.add(
                     new Collectible({
                         scene: this,
                         x: object.x,
                         y: object.y,
-                        texture: object.properties.kindOfCollectible,
+                        texture: kindOfCollectible,
                         points: 100,
                     })
                 )
@@ -226,7 +240,7 @@ export class GameScene extends Phaser.Scene {
                         tweenProps: {
                             y: {
                                 value: 50,
-                                duration: 1500,
+                                duration: 5000,
                                 ease: 'Power0',
                             },
                         },
@@ -243,8 +257,8 @@ export class GameScene extends Phaser.Scene {
                         texture: 'platform',
                         tweenProps: {
                             x: {
-                                value: object.x + 50,
-                                duration: 1200,
+                                value: object.x + 1400,
+                                duration: 8000,
                                 ease: 'Power0',
                             },
                         },
@@ -338,12 +352,14 @@ export class GameScene extends Phaser.Scene {
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     private handlePlayerPortalOverlap(_player: any, _portal: any): void {
-        if (
-            (_player.getKeys().get('DOWN')?.isDown &&
-                _portal.getPortalDestination().dir === 'down') ||
-            (_player.getKeys().get('RIGHT')?.isDown &&
-                _portal.getPortalDestination().dir === 'right')
-        ) {
+        if (_portal.name === 'exit') {
+            this.scene.stop('GameScene')
+            this.scene.stop('HUDScene')
+            this.scene.start('MenuScene')
+        } else if (_portal.name === 'winner') {
+            console.log("You win")
+            //do something special!!
+        } else {
             // set new level and new destination for mario
             this.registry.set('level', _portal.name)
             this.registry.set('spawn', {
@@ -354,10 +370,6 @@ export class GameScene extends Phaser.Scene {
 
             // restart the game scene
             this.scene.restart()
-        } else if (_portal.name === 'exit') {
-            this.scene.stop('GameScene')
-            this.scene.stop('HUDScene')
-            this.scene.start('MenuScene')
         }
     }
 
@@ -385,7 +397,7 @@ export class GameScene extends Phaser.Scene {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     private handlePlayerOnPlatform(player: any, platform: any): void {
         if (platform.body.moves && platform.body.touching.up && player.body.touching.down) {
-            //
+            console.log(1)
         }
     }
 }
