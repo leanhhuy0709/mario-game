@@ -151,8 +151,16 @@ export class Mario extends Phaser.GameObjects.Sprite {
 
     public fire(): void {
         if (this.fireFlag) {
-            if (this.flipX) this.bullets.add(new Bullet(this.scene, this.x - 64, this.y, -1))
-            else this.bullets.add(new Bullet(this.scene, this.x + 64, this.y, 1))
+            let score = this.scene.registry.get('score')
+
+            if (score >= 100) {
+                score -= 100
+                this.scene.registry.set('score', score)
+                const hudScene = this.scene.scene.get('HUDScene') as HUDScene
+                hudScene.updateScore()
+                if (this.flipX) this.bullets.add(new Bullet(this.scene, this.x - 64, this.y, -1))
+                else this.bullets.add(new Bullet(this.scene, this.x + 64, this.y, 1))
+            }
         }
     }
 

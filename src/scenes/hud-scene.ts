@@ -49,7 +49,7 @@ export class HUDScene extends Phaser.Scene {
             )
     }
 
-    private updateScore() {
+    public updateScore() {
         const score = this.textElements.get('SCORE')
         if (score)
             score

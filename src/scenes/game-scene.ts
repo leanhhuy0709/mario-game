@@ -59,7 +59,6 @@ export class GameScene extends Phaser.Scene {
         this.registry.set('world', world)
         // add our tileset and layers to our tilemap
         this.tileset = this.map.addTilesetImage('fish-tiles')
-
         this.map.createLayer('T0', [this.tileset], 0, 0)
         this.map.createLayer('T1', [this.tileset], 0, 0).setTint(0x02d5ff)
 
