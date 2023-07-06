@@ -9,7 +9,7 @@ export default class Bullet extends Phaser.GameObjects.Sprite {
         const body = this.body as Phaser.Physics.Arcade.Body
         body.setAllowGravity(false)
 
-        this.setScale(1.5)
+        this.setScale(1.5).setTint(0x32a852)
 
         this.play('fireball')
     }
