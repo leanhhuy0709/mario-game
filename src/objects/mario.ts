@@ -153,8 +153,8 @@ export class Mario extends Phaser.GameObjects.Sprite {
         if (this.fireFlag) {
             let score = this.scene.registry.get('score')
 
-            if (score >= 100) {
-                score -= 100
+            if (score >= 200) {
+                score -= 200
                 this.scene.registry.set('score', score)
                 const hudScene = this.scene.scene.get('HUDScene') as HUDScene
                 hudScene.updateScore()

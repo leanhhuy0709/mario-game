@@ -1347,18 +1347,6 @@
                          "type":"bool",
                          "value":true
                         }]
-                }, 
-                {
-                 "animation":[
-                        {
-                         "duration":90,
-                         "tileid":100
-                        }, 
-                        {
-                         "duration":90,
-                         "tileid":101
-                        }],
-                 "id":100
                 }],
          "tilewidth":64
         }],

@@ -365,7 +365,7 @@ export class GameScene extends Phaser.Scene {
      */
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     private handlePlayerEnemyOverlap(_player: any, _enemy: any): void {
-        if (_player.body.touching.down && _enemy.body.touching.up) {
+        if (_player.y < _enemy.y + _enemy.height + 5) {
             // player hit enemy on top
             _player.bounceUpAfterHitEnemyOnHead()
             _enemy.gotHitOnHead()
